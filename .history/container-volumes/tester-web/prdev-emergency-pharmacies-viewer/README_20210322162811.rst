@@ -1,0 +1,93 @@
+﻿=================================
+PRDev Notdienst-Apotheken Anzeige
+=================================
+Skripte für das Laden und Anzeigen(HTML) von Apotheken Notdienst Informationen (XML)
+
+LIZENZBEDINGUNGEN
+-----------------
+Das XML-Notdienstportal ist frei verwendbar.
+Es ist nicht gestattet, dieses Skript ohne Erlaubnis von PRDev zu multiplizieren.
+
+
+Installation
+------------
+Entpacken Sie die Datei an einen beliebigen Pfad auf Ihrem Server, mindestens benötigt: PHP 7.3.
+
+Fügen Sie an der gewünschten Stelle in Ihrem HTML Code folgendes ein:
+
+<iframe src="<Ihr Installationspfad>/prdev-emergency-pharmacies-viewer-master/index.php" width="600px" height="800px"></iframe>
+
+Oder verweisen Sie auf folgende Datei:
+
+<Ihr Installationspfad>/prdev-emergency-pharmacies-viewer-master/index.php
+
+(Empfohlen)
+Stündlicher Refresh des iFrame:
+
+<script type=text/javascript>
+    window.onload = function() {
+        var frameRefreshInterval = setInterval(function() {
+            document.getElementById("prdev-emergency-pharmacies-viewer").src = document.getElementById("prdev-emergency-pharmacies-viewer").src
+        }, 36000);
+    }
+</script>
+
+(Optional)
+Möchten Sie die Ressourcen für mehrere Instanzen mit unterschiedlicher Konfiguration einsetzen, können Sie den Pfad zur Konfigurationsdatei folgenderweise ergänzen.
+
+?configFilePath=<Pfad zur Konfigurationsdatei>.json
+
+Wobei Sie absolute oder relative Dateipfade angeben können.
+
+
+URL für die Schnittstellen
+--------------------------
+Damit das XML-Notdienstportal die Daten aus der XML-Schnittstelle des Notdienstplaners laden kann, müssen Sie sich von der
+gewünschten Apothekerkammer einen Link generieren lassen.
+Gehen Sie dazu auf die Homepage der gewünschten Apothekenkammer, dann auf Notdienstportal, XML-Schnittstelle und dort geben Sie die benötigten Informationen an.
+
+
+Konfiguration
+-------------
+Dateiname: **Config/config.json**
+
+===================  ==========   ===============================================================================================   ============================================
+Eigenschaft          Datentyp     Beschreibung                                                                                      Standartwert
+===================  ==========   ===============================================================================================   ============================================
+url                  int          URL der Schnittstelle.
+propertiesXmlPaths   Objekt       Eigenschaften der Apotheke und Liste möglicher Pfade im XML Doc zum auslesen.                     {"to": ["/container/entries/entry/to"],...}
+useCurrentTime       bool         Gibt an ob Apotheken angezeigt werden wo der Notdienst noch nicht geendet hat                     true
+toDays               int          Wie viele weitere Tage angezeigt werden sollen, 0 = nur heute.                                    0
+phoneRegionPrefix    string       Internationale Telefonvorwahl.                                                                     +49
+propertiesDisplay    Objekt       Eigenschaften der Apotheke und mit welchen HTML Tags diese angezeigt werden.                      { "name": ["div", ...]}
+===================  ==========   ===============================================================================================   ============================================
+
+
+Hinweis zu propertiesXmlPaths
+-----------------------------
+Es können nur XML Elemente definiert werden die im XML Baum gegeben sind, prüfen Sie die Richtigkeit der möglichen Pfade.
+Alle gelisteten Pfade werden ausgelesen, bis ein gültiger Wert angezeigt werden kann.
+
+
+Hinweis zu propertiesDisplay
+----------------------------
+Es dürfen nur Eigenschaften eingetragen werden die aus den XML Baum mittels propertiesXmlPaths definiert wurden.
+Sie können eine  Liste (Array) an HTML Tags angeben um so das HTML für die Anzeige zu definieren.
+Oder Geben Sie HTML-Abschnitte an um z.B. eigene Tags zu definieren, mehrere Eigenschaften zusammenzufassen oder Symbole hinzuzufügen. Sehen Sie sich dazu die Konfiguration für "zipCode" und "location" im Beispiel an.
+
+
+Formatierung mit CSS
+--------------------
+Die einzelnen Klassen der HTML Tags müssen noch mit CSS formatiert werden.
+Automatisch werden CSS Klassen aus den jeweiligen Eigenschaften generiert.
+Ein Standard-Stylesheet steht als style.css zur Verfügung. Dieses wird von der index.php Datei verlinkt
+
+Schnittstellenspezifische Konfiguration
+---------------------------------------
+Je nach Schnittstelle gibt es verschiedene Elemente die zur Anzeige gebracht werden können.
+Die genaue Bezeichnung der Elemente kann aus der XML Datei ausgelesen werden.
+
+
+Probleme / Fragen / Anmerkungen
+-----------------------------
+Wenn Sie Probleme, Fragen oder Anmerkungen haben kontaktieren Sie bitte: Philipp Rönsch proensch@t-online.de

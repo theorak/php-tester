@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  prdev-tester-phpfpm:
+    build:
+      context: ./php-fpm
+      dockerfile: Dockerfile
+    container_name: prdev-tester-phpfpm
+    restart: always
+    volumes:
+      - vol_tester_web:/var/www/html
+
+  prdev-tester-nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: prdev-tester-nginx
+    restart: always
+    links:
+      - prdev-tester-phpfpm
+    volumes:
+      - vol_tester_web:/var/www/html
+    ports:
+      - 80:80
+      - 443:443
+
+volumes:
+  vol_tester_web:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/tester-docker/container-volumes/tester-web
+      #device: /home/scrooge/dev/php-projects/php-tex/container-volumes/tester-web

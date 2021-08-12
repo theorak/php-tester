@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tester</title>
+</head>
+<body>
+
+<h1>PR Dev Notdienstanzeige</h1>
+<iframe id="prdev-emergency-pharmacies-viewer" src="prdev-emergency-pharmacies-viewer/index.html" width="600px" height="800px"></iframe>
+<script type=text/javascript>
+    window.onload = function() {
+        var frameRefreshInterval = setInterval(function() {
+            document.getElementById("prdev-emergency-pharmacies-viewer").src = document.getElementById("prdev-emergency-pharmacies-viewer").src
+        }, 36000);
+    }
+</script>
+
+</body>
+</html>

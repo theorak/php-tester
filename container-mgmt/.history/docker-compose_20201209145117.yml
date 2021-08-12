@@ -1,0 +1,52 @@
+version: '3'
+services:
+  sberg-matomo-mariadb:
+    build:
+      context: ./mariadb
+      dockerfile: Dockerfile
+    container_name: sberg-matomo-mariadb
+    restart: always
+    volumes:
+      - ../container-volumes/mariadb/:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secure#PW4mysql
+    env_file:
+      - ./mariadb/db.env
+
+  sberg-matomo-phpfpm:
+    build:
+      context: ./php-fpm
+      dockerfile: Dockerfile
+    container_name: sberg-matomo-phpfpm
+    restart: always
+    links:
+      - sberg-matomo-mariadb
+    volumes:
+      - vol_matomo_web:/var/www/html
+    environment:
+      MATOMO_DATABASE_HOST: sberg-matomo-mariadb
+    env_file:
+      - ./mariadb/db.env
+
+  sberg-matomo-nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: sberg-matomo-nginx
+    restart: always
+    links:
+      - sberg-matomo-phpfpm
+    volumes:
+      - vol_matomo_web:/var/www/html
+    ports:
+      - 80:80
+      - 443:443
+
+volumes:
+  vol_matomo_web:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/matomo-docker/container-volumes/matomo-web
+      #device: /home/scrooge/dev/docker-projects/matomo-docker/container-volumes/matomo-web

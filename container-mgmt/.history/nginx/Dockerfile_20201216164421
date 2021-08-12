@@ -1,0 +1,16 @@
+FROM nginx:1.17
+
+## install needed tool
+RUN apt-get update && apt-get install net-tools
+
+ADD matomo.conf /etc/nginx/conf.d/
+ADD ssl.conf /etc/nginx/conf.d/
+ADD fastcgi-php.conf /etc/nginx/snippets/
+#ADD localhost.crt /etc/letsencrypt/live/dev./fullchain.pem
+#ADD localhost.key /etc/letsencrypt/live/matomo.sberg.net/privkey.pem
+RUN rm /etc/nginx/conf.d/default.conf
+
+RUN rm /etc/localtime
+RUN ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+
+EXPOSE 80
